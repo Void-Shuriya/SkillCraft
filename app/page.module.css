@@ -1,150 +1,670 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
+/* Compact, centred workspace. Large writing areas remain the focus. */
+.shell {
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
+}
+.skipLink {
+  position: fixed;
+  top: -80px;
+  left: 16px;
+  z-index: 20;
+  background: var(--surface);
+  padding: 12px 20px;
+}
+.skipLink:focus {
+  top: 12px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px max(24px, calc((100% - 1000px) / 2));
+  background: var(--header);
+  border-bottom: 1px solid var(--line-soft);
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 750;
+  font-size: 20px;
+  letter-spacing: -0.6px;
+}
+.brandMark {
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+}
+.workspaceLayout {
   flex: 1;
+  padding: 36px 24px 0;
+}
+.main {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.workspaceHeading {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
+  gap: 22px;
+  margin-bottom: 32px;
 }
-
-.main {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
-}
-
 .intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
+  text-align: center;
 }
-
 .intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
+  font-size: clamp(27px, 3vw, 34px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -1px;
+  outline: none;
 }
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
+.steps {
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 38px;
+}
+.step {
+  white-space: nowrap;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
   font-size: 14px;
 }
-
-.ctas a {
+.step:disabled {
+  opacity: 1;
+}
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: calc(100% + 12px);
+  width: 14px;
+  height: 1px;
+  background: var(--line-soft);
+}
+.stepNumber {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line-soft);
+  border-radius: 50%;
+  background: var(--surface);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.step[aria-current="step"] {
+  color: var(--ink);
+  font-weight: 700;
+}
+.step[aria-current="step"] .stepNumber {
+  color: #fff;
+  background: var(--button);
+  border-color: transparent;
+}
+.step:not(:disabled):hover {
+  color: var(--accent);
+}
+.projectForm {
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  background: var(--surface);
+  padding: 28px 36px 32px;
+  box-shadow: 0 8px 32px var(--shadow);
+}
+.formTopline {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
+  margin-bottom: 28px;
+}
+.sampleButtons {
+  display: flex;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
-}
-
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
+  flex-wrap: wrap;
   gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
 }
-
-a.secondary {
-  border-color: var(--button-secondary-border);
+.sampleButtons button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  min-height: 36px;
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
 }
-
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
+.sampleButtons button:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.writingGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+.writingGrid textarea {
+  min-height: 260px;
+}
+.field {
+  min-width: 0;
+  margin-bottom: 28px;
+}
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-bottom: 12px;
+}
+.field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 650;
+}
+.characterCount {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.field input {
+  min-height: 52px;
+}
+.field input,
+.field textarea {
+  display: block;
+  font-size: 16px;
+  line-height: 1.65;
+}
+.fieldHint {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 8px 0 12px;
+}
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line-soft);
+}
+.primaryButton,
+.secondaryButton,
+.selectedButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.5;
+  transition:
+    background 150ms,
+    border-color 150ms;
+}
+.primaryButton {
+  background: var(--button);
+  color: #fff;
+  white-space: nowrap;
+}
+.primaryButton:not(:disabled):hover {
+  background: var(--button-hover);
+}
+.secondaryButton {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink);
+}
+.secondaryButton:not(:disabled):hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.selectedButton {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.textButton,
+.editButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 600;
+  min-height: 44px;
+}
+.textButton:hover,
+.editButton:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.error,
+.notice,
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-raised);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.6;
+}
+.error {
+  color: var(--danger);
+}
+.error span,
+.loading strong {
+  flex: 1;
+}
+.error button {
+  display: flex;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 6px;
+}
+.loading {
+  border-color: var(--accent);
+}
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--line-soft);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 900ms linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
+}
+.warning {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--warning);
+  padding: 8px 0;
+}
+.reviewLayout {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.sectionHeading {
+  margin-bottom: 18px;
+}
+.sectionHeading h2 {
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.3px;
+}
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 13px;
+  vertical-align: middle;
+}
+.skills {
+  display: grid;
+  gap: 16px;
+}
+.skillCard {
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  padding: 24px;
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+.acceptedCard {
+  border-color: var(--accent);
+}
+.rejectedCard {
+  border-style: dashed;
+  background: var(--canvas);
+}
+.rejectedCard > h3 {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.skillTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.skillTop .warning {
+  padding: 0;
+}
+.decisionLabel {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 13px;
+}
+.skillCard h3 {
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.3px;
+  margin-bottom: 8px;
+}
+.skillCard > p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.skillDetails {
+  margin-top: 16px;
+}
+.skillDetails summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 14px;
+  padding: 8px 0;
+}
+.citations {
+  margin: 12px 0;
+}
+.citations blockquote {
+  margin: 10px 0;
+  border-left: 2px solid var(--line);
+  background: var(--input);
+  padding: 12px 14px;
+  border-radius: 0 6px 6px 0;
+}
+.citations blockquote span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.citations blockquote p {
+  white-space: pre-wrap;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.contributionNote {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.cardButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+.cardButtons .secondaryButton,
+.cardButtons .selectedButton {
+  padding: 8px 12px;
+  font-size: 14px;
+  min-height: 40px;
+}
+.editButton {
+  margin-left: auto;
+}
+.skillEdit label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 12px 0 8px;
+}
+.skillEdit textarea {
+  min-height: 180px;
+}
+.reviewFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+}
+.reviewFooter p {
+  color: var(--muted);
+  font-size: 14px;
+}
+.reviewFooter strong {
+  color: var(--ink);
+}
+.reviewTools {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 16px;
+}
+.empty {
+  padding: 24px;
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.empty h3 {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+.empty p {
+  font-size: 14px;
+  color: var(--muted);
+}
+.cvEditor {
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+}
+.cvHeading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-bottom: 18px;
+}
+.cvHeading label {
+  font-size: 14px;
+  font-weight: 650;
+}
+.provenance {
+  font-size: 13px;
+  color: var(--muted);
+}
+.cvEditor textarea {
+  display: block;
+  min-height: 420px;
+  line-height: 1.85;
+  font-size: 16px;
+}
+.cvActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+}
+.cvActions > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.footer {
+  text-align: center;
+  padding: 24px;
+  margin-top: 40px;
+  background: var(--footer);
+  border-top: 1px solid var(--line-soft);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+@media (max-width: 900px) {
+  .projectForm {
+    padding: 26px;
+  }
+  .writingGrid {
+    gap: 22px;
   }
 }
-
 @media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
+  .header {
+    padding: 12px 16px;
   }
-
-  .intro {
+  .brand {
+    font-size: 18px;
+  }
+  .workspaceLayout {
+    padding: 28px 16px 0;
+  }
+  .workspaceHeading {
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+  .intro h1 {
+    font-size: 27px;
+    letter-spacing: -0.7px;
+  }
+  .steps {
+    width: 100%;
+    gap: 12px;
+  }
+  .step {
+    flex-direction: column;
+    white-space: normal;
+    text-align: center;
+    flex: 1;
+  }
+  .step:not(:last-child)::after {
+    top: 20px;
+  }
+  .step {
+    gap: 6px;
+    font-size: 14px;
+  }
+  .step:not(:last-child)::after {
+    left: calc(100% + 7px);
+    width: 6px;
+  }
+  .projectForm {
+    padding: 20px 18px 24px;
+    border-radius: 12px;
+  }
+  .formTopline {
+    margin-bottom: 24px;
+    justify-content: flex-start;
+  }
+  .sampleButtons {
+    gap: 6px;
+  }
+  .writingGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .writingGrid textarea {
+    min-height: 240px;
+  }
+  .formActions {
+    flex-wrap: wrap;
     gap: 16px;
   }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
+  .formActions .primaryButton {
+    flex: 1;
+  }
+  .skillCard {
+    padding: 20px;
+  }
+  .skillEdit input,
+  .skillEdit textarea {
+    font-size: 16px;
+  }
+  .reviewFooter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .reviewTools {
+    flex-wrap: wrap;
+  }
+  .cvEditor {
+    padding: 20px 16px;
+  }
+  .cvEditor textarea {
+    min-height: 480px;
+  }
+  .cvActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .cvActions > .textButton {
+    align-self: flex-start;
+  }
+  .cvActions > div > button {
+    flex: 1;
+    padding-inline: 12px;
+  }
+  .error,
+  .notice,
+  .loading {
+    padding: 14px;
+  }
+  .footer {
+    margin-top: 32px;
+    padding: 22px 16px;
   }
 }
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
+@media print {
+  .header,
+  .workspaceHeading,
+  .footer,
+  .cvActions,
+  .notice,
+  .error,
+  .skipLink {
+    display: none;
   }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  .workspaceLayout,
+  .cvEditor {
+    padding: 0;
+    border: 0;
   }
-}
-
-.code {
-  font-family: var(--font-geist-mono);
-  font-size: 0.9em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.1em 0.4em;
-  border-radius: 6px;
 }
