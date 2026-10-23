@@ -33,4 +33,3 @@ Students can describe their work in simple English, list tools they used or past
 - Work stays in the current page and is cleared by a refresh; export before leaving.
 - Project details are sent to Google's Gemini API for generation.
 - API availability depends on the configured project's quota.
-- Vercel deployment is planned; a live demo link will be added when available.
