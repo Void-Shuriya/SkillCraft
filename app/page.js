@@ -29,11 +29,13 @@ export default function Home() {
   const controller = useRef(null);
 
   useEffect(() => {
+    // Remove drafts saved by older versions; current work stays in memory only.
     try {
       localStorage.removeItem("skillcraft-draft-v1");
     } catch {
       /* Storage can be unavailable. */
     }
+
     const abort = new AbortController();
     fetch("/api/analyse", { signal: abort.signal })
       .then((response) => response.json())
@@ -44,7 +46,9 @@ export default function Home() {
       controller.current?.abort();
     };
   }, []);
+
   useEffect(() => {
+    // Announce the new step to keyboard and screen-reader users.
     heading.current?.focus({ preventScroll: true });
   }, [step]);
 
@@ -69,6 +73,8 @@ export default function Home() {
 
   function updateProject(key, value) {
     setProject((previous) => ({ ...previous, [key]: value }));
+
+    // Results must be regenerated when their source project changes.
     clearEntry();
     if (analysis) {
       setAnalysis(null);
@@ -78,9 +84,7 @@ export default function Home() {
 
   function loadSample() {
     if (
-      (project.title ||
-        project.description ||
-        project.contribution) &&
+      (project.title || project.description || project.contribution) &&
       !window.confirm("Replace your current work with this example?")
     )
       return;
@@ -96,9 +100,12 @@ export default function Home() {
     setNotice("");
     setBusy(true);
     setBusyLabel(label);
+
     const abort = new AbortController();
     controller.current = abort;
+    // Allow time for the server's 45-second AI timeout to return a useful error.
     const timeout = setTimeout(() => abort.abort(), 55000);
+
     try {
       const response = await fetch("/api/analyse", {
         method: "POST",
@@ -144,10 +151,7 @@ export default function Home() {
   function clearAll() {
     if (busy) return;
     const hasWork =
-      project.title ||
-      project.description ||
-      project.contribution ||
-      entry;
+      project.title || project.description || project.contribution || entry;
     if (hasWork && !window.confirm("Clear all project text and results?"))
       return;
 
@@ -160,6 +164,7 @@ export default function Home() {
   }
 
   function updateSkill(id, changes) {
+    // A previously generated CV may no longer match the student's choices.
     clearEntry();
     setAnalysis((previous) => ({
       ...previous,
@@ -425,7 +430,7 @@ export default function Home() {
         </main>
       </div>
       <footer className={styles.footer}>
-        © 2026 SkillCraft &nbsp;|&nbsp; Built by Cyber Syntax
+        <div> © 2026 SkillCraft &nbsp;|&nbsp; Cyber Syntax</div>
       </footer>
     </div>
   );

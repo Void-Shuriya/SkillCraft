@@ -6,6 +6,7 @@ export default function CVProjectEditor({
   generatedAt,
   error,
 }) {
+  // The parent owns the editable text so copy and download use the latest draft.
   return (
     <section className={styles.cvEditor} aria-label="CV project section editor">
       <div className={styles.cvHeading}>

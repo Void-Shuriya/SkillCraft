@@ -19,6 +19,7 @@ export default function Icon({ name, size = 20 }) {
     edit: <path d="m15 3 6 6M4 15 16 3l5 5L9 20l-6 1 1-6Z" />,
     download: <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />,
   };
+
   return (
     <svg
       width={size}

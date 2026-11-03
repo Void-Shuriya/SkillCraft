@@ -10,8 +10,11 @@ export default function SkillCard({ skill, onChange, disabled }) {
   const [explanation, setExplanation] = useState(skill.explanation);
   const validationError =
     proseError(name, "Skill name") || proseError(explanation, "Explanation");
+
   function save() {
     if (!name.trim() || !explanation.trim() || validationError) return;
+
+    // Edited suggestions need a fresh inclusion decision before CV generation.
     onChange({
       name: name.trim(),
       explanation: explanation.trim(),
@@ -20,6 +23,7 @@ export default function SkillCard({ skill, onChange, disabled }) {
     });
     setEditing(false);
   }
+
   return (
     <article
       className={`${styles.skillCard} ${skill.decision === "rejected" ? styles.rejectedCard : ""} ${skill.decision === "accepted" ? styles.acceptedCard : ""}`}
@@ -126,7 +130,8 @@ export default function SkillCard({ skill, onChange, disabled }) {
             disabled={disabled}
             aria-pressed={skill.decision === "accepted"}
             onClick={() => {
-              if (skill.decision !== "accepted") onChange({ decision: "accepted" });
+              if (skill.decision !== "accepted")
+                onChange({ decision: "accepted" });
             }}
           >
             <Icon name="check" size={16} />{" "}
@@ -141,7 +146,8 @@ export default function SkillCard({ skill, onChange, disabled }) {
             disabled={disabled}
             aria-pressed={skill.decision === "rejected"}
             onClick={() => {
-              if (skill.decision !== "rejected") onChange({ decision: "rejected" });
+              if (skill.decision !== "rejected")
+                onChange({ decision: "rejected" });
             }}
           >
             <Icon name="close" size={16} />{" "}

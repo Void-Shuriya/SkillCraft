@@ -24,16 +24,18 @@
   --button-hover: #5825ca;
   --accent-soft: #f0e9fc;
   --shadow: #4935680d;
-  --positive: #236c58;
   --warning: #805314;
   --danger: #aa2a4c;
 }
+
 * {
   box-sizing: border-box;
 }
+
 html {
   scroll-behavior: smooth;
 }
+
 body {
   margin: 0;
   background: var(--canvas);
@@ -43,20 +45,24 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
+
 button,
 input,
 select,
 textarea {
   font: inherit;
 }
+
 button {
   cursor: pointer;
   color: inherit;
 }
+
 button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
+
 input,
 select,
 textarea {
@@ -72,15 +78,18 @@ textarea {
     border-color 160ms,
     box-shadow 160ms;
 }
+
 textarea {
   resize: vertical;
   min-height: 190px;
 }
+
 input::placeholder,
 textarea::placeholder {
   color: var(--muted);
   opacity: 1;
 }
+
 input:focus,
 select:focus,
 textarea:focus {
@@ -88,16 +97,19 @@ textarea:focus {
   outline: none;
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
+
 button:focus-visible,
 a:focus-visible,
 summary:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
 }
+
 a {
   color: var(--accent);
   text-underline-offset: 3px;
 }
+
 h1,
 h2,
 h3,
@@ -105,19 +117,24 @@ h4,
 p {
   margin: 0;
 }
+
 fieldset {
   border: 0;
   padding: 0;
   margin: 0;
   min-width: 0;
 }
+
 svg {
   flex-shrink: 0;
 }
+
 ::selection {
   background: var(--accent-soft);
   color: var(--ink);
 }
+
+/* Respect the device's motion preference across all workflow steps. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -127,10 +144,13 @@ svg {
     transition: none !important;
   }
 }
+
+/* Shared print defaults; page.module.css hides interactive controls. */
 @page {
   size: A4;
   margin: 16mm;
 }
+
 @media print {
   :root {
     color-scheme: light;
@@ -144,9 +164,9 @@ svg {
     --line-soft: #ddd8e4;
     --accent: #4f279d;
     --accent-soft: #f1edf7;
-    --positive: #235c4e;
     --warning: #70501b;
   }
+
   body {
     background: #fff;
     font-size: 11pt;

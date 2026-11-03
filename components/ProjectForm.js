@@ -14,6 +14,7 @@ export default function ProjectForm({
   onSubmit,
   onClear,
 }) {
+  // Keep validation, character counts and accessible hints aligned across fields.
   function field(key, label, placeholder, rows) {
     const error = proseError(project[key], label);
     const shared = {
@@ -27,6 +28,7 @@ export default function ProjectForm({
         updateProject(key, event.target.value);
       },
     };
+
     return (
       <div className={styles.field}>
         <div className={styles.labelRow}>
@@ -54,6 +56,7 @@ export default function ProjectForm({
       </div>
     );
   }
+
   return (
     <form
       className={styles.projectForm}
@@ -74,6 +77,7 @@ export default function ProjectForm({
             </button>
           </div>
         </div>
+
         {field("title", "Project title", "e.g. Student Spending Survey")}
         <div className={styles.writingGrid}>
           {field(
@@ -92,9 +96,7 @@ export default function ProjectForm({
         {config?.requiresCode && (
           <div className={styles.field}>
             <label htmlFor="access-code">Trial access code</label>
-            <p className={styles.fieldHint}>
-              Enter the code from Cyber Syntax.
-            </p>
+            <p className={styles.fieldHint}>Enter the secret code.</p>
             <input
               id="access-code"
               type="password"

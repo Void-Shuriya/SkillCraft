@@ -9,12 +9,18 @@ import { validateCvInput } from "@/lib/cv.mjs";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
+
 const MAX_BYTES = 64000;
-const recentRequests = new Map(); // Best-effort per-server cooldown, not a distributed rate limiter.
+
+// Best-effort per-server cooldown, not a distributed rate limiter.
+const recentRequests = new Map();
+
 const reply = (body, status = 200) =>
   Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
 
 export async function GET() {
+  // Report availability to the form without returning either secret.
+  // The trial password gates access; only GEMINI_API_KEY enables AI generation.
   return reply({
     configured: Boolean(process.env.GEMINI_API_KEY),
     requiresCode:
@@ -34,16 +40,19 @@ export async function POST(request) {
       );
     if (!request.headers.get("content-type")?.includes("application/json"))
       return reply({ error: "Expected a JSON request." }, 415);
+
     if (Number(request.headers.get("content-length")) > MAX_BYTES)
       return reply(
         { error: "This project is too large. Shorten your project details." },
         413,
       );
+
     // Count streamed bytes too; Content-Length alone cannot be trusted.
     const reader = request.body?.getReader();
     if (!reader) return reply({ error: "Please enter project details." }, 400);
     const chunks = [];
     let size = 0;
+
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -57,6 +66,7 @@ export async function POST(request) {
       }
       chunks.push(value);
     }
+
     let input;
     try {
       input = JSON.parse(Buffer.concat(chunks).toString("utf8"));
@@ -66,6 +76,7 @@ export async function POST(request) {
         400,
       );
     }
+
     const code = process.env.TRIAL_ACCESS_CODE;
     if (process.env.VERCEL === "1" && (!code || code.length < 12))
       return reply(
@@ -78,6 +89,7 @@ export async function POST(request) {
     if (code) {
       const supplied =
         typeof input?.accessCode === "string" ? input.accessCode : "";
+      // Fixed-size hashes let timingSafeEqual compare passwords of any length.
       const hash = (value) => createHash("sha256").update(value).digest();
       if (!timingSafeEqual(hash(code), hash(supplied)))
         return reply(
@@ -88,6 +100,7 @@ export async function POST(request) {
           401,
         );
     }
+
     let project;
     try {
       if (!input || typeof input !== "object" || Array.isArray(input))
@@ -99,11 +112,13 @@ export async function POST(request) {
     } catch (error) {
       return reply({ error: error.message }, 400);
     }
+
     // No raw project text, IPs or credentials are logged or stored by this route.
     const identity = createHash("sha256")
       .update(request.headers.get("x-forwarded-for") || "local")
       .digest("hex");
     const now = Date.now();
+
     for (const [key, time] of recentRequests)
       if (now - time > 60000) recentRequests.delete(key);
     if (
@@ -119,7 +134,9 @@ export async function POST(request) {
         { error: "The prototype is busy. Please try again shortly." },
         503,
       );
+
     recentRequests.set(identity, now);
+
     return reply(
       await (input.action === "cv"
         ? generateCvEntry(project)

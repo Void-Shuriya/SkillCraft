@@ -1,4 +1,4 @@
-{
+ {
   "name": "skillcraft",
   "version": "0.1.0",
   "private": true,
@@ -11,7 +11,6 @@
     "node": ">=24.0.0"
   },
   "dependencies": {
-    "franc-min": "6.2.0",
     "next": "16.4.2",
     "react": "19.3.0",
     "react-dom": "19.3.0"
