@@ -1,18 +1,18 @@
- {
-  "name": "skillcraft",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "node --use-system-ca node_modules/next/dist/bin/next dev",
-    "build": "next build",
-    "start": "node --use-system-ca node_modules/next/dist/bin/next start"
-  },
-  "engines": {
-    "node": ">=24.0.0"
-  },
-  "dependencies": {
-    "next": "16.4.2",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
-  }
+{
+    "name": "skillcraft",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "node --use-system-ca node_modules/next/dist/bin/next dev",
+        "build": "next build",
+        "start": "node --use-system-ca node_modules/next/dist/bin/next start"
+    },
+    "engines": {
+        "node": "24.x"
+    },
+    "dependencies": {
+        "next": "16.4.2",
+        "react": "19.3.0",
+        "react-dom": "19.3.0"
+    }
 }
